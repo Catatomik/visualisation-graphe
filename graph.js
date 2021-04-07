@@ -60,6 +60,27 @@ function updateNodes(G, s = null) {
     }
 }
 
+function updateSommets(G) {
+    document.getElementById("sommets").innerHTML = ''
+    const S = G.sommets
+    for (let s of S) {
+        const el = document.createElement("option");
+        el.setAttribute("value", s)
+        el.text = s
+        document.getElementById("sommets").appendChild(el);
+    }
+}
+
+function updateSommetInfo(G) {
+    const selectBox = document.getElementById("sommets");
+    const s = selectBox.options[selectBox.selectedIndex].value;
+    document.getElementById('nom').innerHTML = s
+    document.getElementById('degre').value = G.degre(s)
+    document.getElementById('voisins').innerHTML = G.voisins(s).join(', ')+'.'
+    document.getElementById('connexionsN').value = G.connexions(s).length
+    document.getElementById('connexions').innerHTML = G.connexions(s).join(', ')+'.'
+}
+
 function createEdges(G, sommets, plus_court, color) {
     let chemin = []
     document.getElementById("s1").classList.remove('is-invalid')
@@ -142,10 +163,17 @@ function draw(nodes, edges, containerId, optionsContainerId) {
     const network = new vis.Network(container, data, options);
     network.on('stabilizationProgress', (progress) => {
         document.getElementById("status").innerHTML = `stabilizing (${progress.iterations}/${progress.total})...`
-    })
+    });
     network.on('afterDrawing', () => {
         document.getElementById("status").innerHTML = `done!`
-    })
+    });
+    network.on('click', (e) => {
+        if (!e.nodes.length) return;
+        const node = e.nodes[0]
+        const s = nodes.get(node)
+        document.getElementById("sommets").value = s.label
+        updateSommetInfo(G)
+    });
     return network
 }
 
