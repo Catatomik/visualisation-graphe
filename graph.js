@@ -1,5 +1,5 @@
 function makeGraph() {
-    return creation(mots_4);
+    return creation();
 };
 
 let G;

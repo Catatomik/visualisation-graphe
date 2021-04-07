@@ -18,7 +18,7 @@ function distance(m1, m2) {
     return d;
 }
 
-function creation(mots = []) {
+function creation(mots = mots_4) {
     const G = new Graphe();
     for (let x = 0; x < mots.length; x++) {
         G.ajouter_sommet(mots[x]);
