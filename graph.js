@@ -71,7 +71,7 @@ function updateSommets(G) {
     }
 }
 
-function updateSommetInfo(G) {
+function updateSommetInfo(G, highlight = true) {
     const selectBox = document.getElementById("sommets");
     const s = selectBox.options[selectBox.selectedIndex].value;
     document.getElementById('nom').innerHTML = s
@@ -79,6 +79,7 @@ function updateSommetInfo(G) {
     document.getElementById('voisins').innerHTML = G.voisins(s).join(', ')+'.'
     document.getElementById('connexionsN').value = G.connexions(s).length
     document.getElementById('connexions').innerHTML = G.connexions(s).join(', ')+'.'
+    if (highlight) nw.selectNodes([nodes.map(n => n).find(n => n.label == s).id], true)
 }
 
 function createEdges(G, sommets, plus_court, color) {
@@ -172,7 +173,7 @@ function draw(nodes, edges, containerId, optionsContainerId) {
         const node = e.nodes[0]
         const s = nodes.get(node)
         document.getElementById("sommets").value = s.label
-        updateSommetInfo(G)
+        updateSommetInfo(G, false)
     });
     return network
 }
