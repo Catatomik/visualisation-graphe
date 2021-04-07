@@ -13,8 +13,8 @@ function createNodes(G, color) {
     let colorDict;
     document.getElementById("nb_couleurs").innerHTML = 'ø'
     if (color == "coloration_degre") {
-        min = G.sommet_degre_min[1]
-        max = G.sommet_degre_max[1]
+        min = G.sommet_degre_min[1]+1
+        max = G.sommet_degre_max[1]+1
         document.getElementById("nb_couleurs").innerHTML = max
     } else if (color == "coloration_gloutonne") {
         colorDict = coloration_gloutonne(G)
@@ -26,7 +26,7 @@ function createNodes(G, color) {
         return {
             id: i+1,
             label: s,
-            value: G.degre(s),
+            value: G.degre(s)+1,
             color: color == "coloration_gloutonne" ? calcColor(min, max, colorDict[s]) : color == "coloration_degre" ? calcColor(min, max, G.degre(s)) : undefined,
         }
     })
