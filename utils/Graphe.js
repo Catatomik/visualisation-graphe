@@ -136,7 +136,7 @@ class Graphe {
      * @param {String} s Un sommet du graphe
      * @returns {Array}
      */
-    connexion(s) {
+    connexions(s) {
         let l = this.voisins(s)
         for (let s1 of this.sommets) {
             if (this.voisins(s1).includes(s) && !l.includes(s1)) l.push(s1)
