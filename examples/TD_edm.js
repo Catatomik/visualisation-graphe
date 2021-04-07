@@ -28,3 +28,20 @@ function creation(mots = mots_4) {
     }
     return G;
 }
+
+async function plus_long_des_plus_courts(G) {
+    max = [null, null, 0]
+    const S = G.sommets
+    for (let x in S) {
+        for (let y = x; y < S.length; y++) {
+            const p = chemin_plus_court(G, S[x], S[y])
+            if (p.length > max[2]) max = [S[x], S[y], p.length]
+        }
+    }
+    return max
+}
+
+// let gEx = creation()
+// plus_long_des_plus_courts(gEx).then(plus_long => {
+//     alert(`Le plus long parcours parmi les plus courts est ${plus_long[0]} → ${plus_long[1]} de longueur ${plus_long[2]}.`)
+// })
