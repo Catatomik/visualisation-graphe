@@ -106,7 +106,7 @@ function chemin_plus_court(G, d, a) {
 function coloration_gloutonne(G) {
     let coloration = {}
     for (let s of G.sommets) {
-        const voisins = G.voisins(s)
+        const voisins = G.connexions(s)
         let i = -1
         while (!voisins.every(v => coloration[v] != i) || i < 0) {
             i++
