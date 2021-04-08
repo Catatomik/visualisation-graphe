@@ -15,12 +15,12 @@ function createNodes(G, color) {
     if (color == "coloration_degre") {
         min = G.sommet_degre_min[1]+1
         max = G.sommet_degre_max[1]+1
-        document.getElementById("nb_couleurs").innerHTML = max
+        document.getElementById("nb_couleurs").innerHTML = max-1
     } else if (color == "coloration_gloutonne") {
         colorDict = coloration_gloutonne(G)
-        min = Math.min(...Object.values(colorDict))
-        max = Math.max(...Object.values(colorDict))
-        document.getElementById("nb_couleurs").innerHTML = max+1
+        min = Math.min(...Object.values(colorDict))+1
+        max = Math.max(...Object.values(colorDict))+1
+        document.getElementById("nb_couleurs").innerHTML = max
     }
     const sommets = G.sommets.map((s, i) => {
         return {
@@ -98,7 +98,7 @@ function createEdges(G, sommets, plus_court, color) {
         } else {
             document.getElementById("s1").classList.add('is-valid')
             document.getElementById("s2").classList.add('is-valid')
-            document.getElementById("length").innerHTML = chemin.length
+            document.getElementById("length").innerHTML = chemin.length-1
         }
     }
     const aretes = [];
