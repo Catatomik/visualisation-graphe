@@ -50,6 +50,16 @@ class Graphe {
     }
 
     /**
+     * @description Retourne vrai si les sommets s1 et s2 sont adjacents, sinon faux
+     * @param {String} s1 Un sommet du graphe
+     * @param {String} s2 Un sommet du graphe
+     * @returns {Boolean}
+     */
+    ajdacent(s1, s2) {
+        return this.arc(s1, s2) || this.arc(s2, s1)
+    }
+
+    /**
      * @description Les sommets du graphe
      * @returns {Array<String>}
      */
@@ -137,11 +147,7 @@ class Graphe {
      * @returns {Array}
      */
     connexions(s) {
-        let l = this.voisins(s)
-        for (let s1 of this.sommets) {
-            if (this.voisins(s1).includes(s) && !l.includes(s1)) l.push(s1)
-        }
-        return l
+        return this.sommets.filter(s1 => this.ajdacent(s, s1))
     }
 
 }
