@@ -23,7 +23,7 @@
             }
         </style>
     </head>
-    <body>
+    <body class="d-flex flex-column">
         <script type="text/javascript" src="./utils/maillon.js"></script>
         <script type="text/javascript" src="./utils/pile.js"></script>
         <script type="text/javascript" src="./utils/file.js"></script>
@@ -85,7 +85,7 @@
                 </div>
             </div>
         </div>
-            <div class="row row-cols-2 px-1">
+            <div class="row row-cols-2 px-1 mb-3">
                 <div class="col-3">
                     <div class="border bColor border-1 rounded-1 p-2 ms-2">
                         <h1 class="display-5 ms-2 overflow-hidden" id="nom">Nom</h1>
@@ -140,5 +140,10 @@
             }
             create(true);
         </script>
+        <footer class="footer mt-auto py-2 bg-light">
+            <div class="container mx-auto" style="max-width: 60%;">
+                <span class="text-muted">Voir <a href="https://github.com/Catatomik/visualisation-graphe" target="_blank">ici</a> pour le code source.</span>
+            </div>
+        </footer>
     </body>
 </html>
