@@ -1,3 +1,6 @@
+// Exemple de visualisation
+// Problème des échelles de mots/doublets (word ladder) https://fr.wikipedia.org/wiki/Doublets
+
 const mots_4 = ["aime", "auge", "baie", "brie", "bris", "bure", "cage", "cale", "came", "cape",
 "cime", "cire", "cris", "cure", "dame", "dime", "dire", "ducs", "dues", "duos",
 "dure", "durs", "fart", "fors", "gage", "gaie", "gais", "gale", "gare", "gars",
