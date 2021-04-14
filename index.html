@@ -28,8 +28,9 @@
         <script type="text/javascript" src="./utils/pile.js"></script>
         <script type="text/javascript" src="./utils/file.js"></script>
         <script type="text/javascript" src="./utils/Graphe.js"></script>
+        <script type="text/javascript" src="./utils/Graphe_pondere.js"></script>
         <script type="text/javascript" src="./utils/parcours.js"></script>
-        <script type="text/javascript" src="./examples/TD_edm.js"></script>
+        <script type="text/javascript" src="./examples/routage.js"></script>
         <script type="text/javascript" src="./graph.js"></script>
         <div class="container mt-2 p-3">
             <div class="row row-cols-3 px-1">
@@ -56,16 +57,24 @@
                     <div class="bg-dark rounded p-2 h-100">
                         <h5 class="mx-2 mt-2">Analyse</h5>
                         <hr class="my-2">
-                        <label for="s1" class="form-label">Chemin le plus court</label>
+                        Chemin le plus court
+                        <div class="input-group my-1">
+                            <input class="form-check-input m-1" type="radio" name="chemin" value="nb_sommets" onclick="create()">
+                            <label class="input-group-label mx-2" for="nb_sommets">Nombre de sommets</label>
+                        </div>
+                        <div class="input-group my-1">
+                            <input class="form-check-input m-1" type="radio" name="chemin" id="dijkstra" value="dijkstra" disabled onclick="create()">
+                            <label class="input-group-label mx-2" for="dijkstra">Dijkstra</label>
+                        </div>
                         <div class="input-group my-1">
                             <span class="input-group-text">De</span>
-                            <input list="nodes" class="form-control" placeholder="sommet..." onkeyup="updateNodes(G, document.getElementById('s1').value)" id="s1">
+                            <input list="nodes" class="form-control" placeholder="sommet..." onkeyup="updateNodesDOM(G, document.getElementById('s1').value)" id="s1">
                             <datalist id="nodes"></datalist>
                             <span class="input-group-text">à</span>
                             <input list="nodes1" class="form-control" placeholder="sommet..." id="s2">
                             <datalist id="nodes1"></datalist>
                         </div>
-                        Longueur : <span id="length">ø</span>
+                        Longueur : <span id="length">ø</span>, coût : <span id="cost">ø</span>
                     </div>
                 </div>
                 <div class="col-4 px-1">
@@ -106,7 +115,7 @@
                         </div>
                     </div>
                     <div class="ms-2 mt-2">
-                        <select class="form-select" id="sommets" onchange="updateSommetInfo(G)" size="15">
+                        <select class="form-select" id="sommets" onchange="updateSommetInfoDOM(G)" size="15">
                         </select>
                     </div>
                 </div>
@@ -119,14 +128,14 @@
                 let colorNodes
                 const radios = document.getElementsByName('coloration');
                 for (let radio of radios) {
-                    if (radio.checked)  colorNodes = radio.value
+                    if (radio.checked) colorNodes = radio.value
                 }
                 const colorEdge = document.getElementById('coloration_arete').checked
                 if (makeG) {
                     document.getElementById("status").innerHTML = `creating graph...`;
                     G = makeGraph();
-                    updateNodes(G);
-                    updateSommets(G)
+                    updateNodesDOM(G);
+                    updateSommetsDOM(G)
                 }
                 document.getElementById("status").innerHTML = `creating nodes...`;
                 var nodesSommets = createNodes(G, colorNodes);
@@ -136,7 +145,7 @@
                 document.getElementById("status").innerHTML = `creating edges...`;
                 edges = createEdges(G, nodesSommets[0], { s1, s2 }, colorEdge)[1];
                 document.getElementById("status").innerHTML = `drawing...`;
-                nw = draw(nodes, edges, "mynetwork", "options");
+                nw = draw(nodes, edges, "mynetwork");
             }
             create(true);
         </script>
