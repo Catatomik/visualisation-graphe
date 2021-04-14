@@ -39,11 +39,11 @@
                         <h5 class="mx-2 mt-2">Affichage</h5>
                         <hr class="my-2">
                         <div class="form-check mb-1">
-                            <input class="form-check-input" type="radio" name="coloration" value="coloration_gloutonne" onclick="create()">
+                            <input class="form-check-input" type="radio" name="coloration" value="coloration_gloutonne" onclick="radioClicked(this)">
                             <label class="form-check-label" for="coloration_gloutonne">Coloration gloutonne</label>
                         </div>
                         <div class="form-check mb-1">
-                            <input class="form-check-input" type="radio" name="coloration" value="coloration_degre" onclick="create()">
+                            <input class="form-check-input" type="radio" name="coloration" value="coloration_degre" onclick="radioClicked(this)">
                             <label class="form-check-label" for="coloration_degre">Coloration selon degrés</label>
                         </div>
                         <p class="mb-1 ms-1">Couleurs : <span id="nb_couleurs">ø</span></p>
@@ -67,11 +67,11 @@
                         <hr class="my-2">
                         Chemin le plus court
                         <div class="form-check mb-1">
-                            <input class="form-check-input" type="radio" name="chemin" value="nb_sommets" onclick="create()">
+                            <input class="form-check-input" type="radio" name="chemin" value="nb_sommets" onclick="radioClicked(this)">
                             <label class="form-check-label" for="nb_sommets">Nombre de sommets</label>
                         </div>
                         <div class="form-check mb-1">
-                            <input class="form-check-input" type="radio" name="chemin" id="dijkstra" value="dijkstra" disabled onclick="create()">
+                            <input class="form-check-input" type="radio" name="chemin" id="dijkstra" value="dijkstra" disabled onclick="radioClicked(this)">
                             <label class="form-check-label" for="dijkstra">Dijkstra</label>
                         </div>
                         <div class="input-group mb-1">
@@ -132,6 +132,16 @@
                 </div>
             </div>
         <script type="text/javascript">
+            const radiosChecked = {}
+            function radioClicked(radio) {
+                if (radio.value == radiosChecked[radio.name]) {
+                    radio.checked = false
+                    delete radiosChecked[radio.name]
+                } else {
+                    radiosChecked[radio.name] = radio.value
+                    create()
+                }
+            }
             function create(makeG = false) {
                 if (makeG) {
                     document.getElementById("status").innerHTML = `creating graph...`;
