@@ -1,5 +1,8 @@
 function makeGraph() {
-    return creation();
+    const G = creation();
+    if (G instanceof GraphePondere) document.getElementById("dijkstra").disabled = false
+    else document.getElementById("dijkstra").disabled = true
+    return G;
 };
 
 let G;
@@ -34,7 +37,7 @@ function createNodes(G, color) {
     return [sommets, nodes];
 }
 
-function updateNodes(G, s = null) {
+function updateNodesDOM(G, s = null) {
     if (s == null) {
         document.getElementById("nodes1").innerHTML = ''
         document.getElementById("nodes").innerHTML = ''
@@ -60,7 +63,7 @@ function updateNodes(G, s = null) {
     }
 }
 
-function updateSommets(G) {
+function updateSommetsDOM(G) {
     document.getElementById("sommets").innerHTML = ''
     const S = G.sommets
     for (let s of S) {
@@ -71,7 +74,7 @@ function updateSommets(G) {
     }
 }
 
-function updateSommetInfo(G, highlight = true) {
+function updateSommetInfoDOM(G, highlight = true) {
     const selectBox = document.getElementById("sommets");
     const s = selectBox.options[selectBox.selectedIndex].value;
     document.getElementById('nom').innerHTML = s
@@ -83,48 +86,82 @@ function updateSommetInfo(G, highlight = true) {
 }
 
 function createEdges(G, sommets, plus_court, color) {
+
     let chemin = []
+    const pondere = G instanceof GraphePondere
+
     document.getElementById("s1").classList.remove('is-invalid')
     document.getElementById("s2").classList.remove('is-invalid')
     document.getElementById("s1").classList.remove('is-valid')
     document.getElementById("s2").classList.remove('is-valid')
+
     if (plus_court.s1.length && plus_court.s2.length) {
+        
         document.getElementById("status").innerHTML += ` > evaluating shortest path...`
-        chemin = chemin_plus_court(G, plus_court.s1, plus_court.s2)
+
+        let modeChemin
+        const radios = document.getElementsByName('chemin');
+        for (let radio of radios) {
+            if (radio.checked) modeChemin = radio.value
+        }
+
+        if (modeChemin == 'nb_sommets') chemin = chemin_plus_court(G, plus_court.s1, plus_court.s2)
+        else if (modeChemin == 'dijkstra') chemin = dijkstra(G, plus_court.s1, plus_court.s2)
+
         if (chemin.length < 2) {
             document.getElementById("s1").classList.add('is-invalid')
             document.getElementById("s2").classList.add('is-invalid')
             document.getElementById("length").innerHTML = "ø"
+            document.getElementById("cost").innerHTML = "ø"
         } else {
             document.getElementById("s1").classList.add('is-valid')
             document.getElementById("s2").classList.add('is-valid')
             document.getElementById("length").innerHTML = chemin.length-1
+            if (modeChemin == 'dijkstra') {
+                let cost = 0
+                for (let i = 0; i < chemin.length-1; i++) {
+                    cost += G.poids[`${chemin[i]}-${chemin[i+1]}`]
+                }
+                document.getElementById("cost").innerHTML = cost
+            }
+            else document.getElementById("cost").innerHTML = "ø"
         }
     }
+
     const aretes = [];
     const S = G.sommets;
+    
     for (let x = 0; x < S.length; x++) {
-        for (let y = x; y < S.length; y++) {
-            if (G.arc(S[x], S[y]) && G.arc(S[y], S[x])) {
+        for (let y = 0; y < S.length; y++) {
+            if (G.arc(S[x], S[y])) {
+
                 const from = sommets.find(s => s.label == S[x]).id
                 const to = sommets.find(s => s.label == S[y]).id
+                if (G.arete(S[x], S[y]) && !pondere && aretes.find(a => a.from == to && a.to == from)) continue
+
                 const fromIndex = chemin.indexOf(S[x])
                 const toIndex = chemin.indexOf(S[y])
-                const onPath = fromIndex > -1 && toIndex > -1 && (fromIndex == toIndex+1 || fromIndex == toIndex-1)
+                const onPath = fromIndex > -1 && toIndex > -1 && (fromIndex == toIndex-1)
+
                 aretes.push({
                     from,
                     to,
+                    arrows: G.arete(S[x], S[y]) && !pondere ? undefined : 'to',
                     width: onPath ? 5 : 1,
                     color: onPath || !color ? 'black' : undefined,
+                    label: pondere ? String(G.poids[`${S[x]}-${S[y]}`]) : undefined,
+                    //value: pondere ? G.poids[`${S[x]}-${S[y]}`] : undefined,
                 })
+
             }
         }
     }
+    console.log(aretes)
     let edges = new vis.DataSet(aretes);
     return [aretes, edges];
 }
 
-function draw(nodes, edges, containerId, optionsContainerId) {
+function draw(nodes, edges, containerId) {
     let container = document.getElementById(containerId);
     let data = {
         nodes,
@@ -144,6 +181,14 @@ function draw(nodes, edges, containerId, optionsContainerId) {
         edges: {
             smooth: {
                 type: document.getElementById("gen_fast").checked ? "continuous" : "dynamic",
+            },
+            scaling: {
+                min: Math.min(...edges.map(n => n.value)),
+                max: Math.max(...edges.map(n => n.value)),
+                label: false,
+            },
+            font: {
+                align: "middle",
             },
         },
         locale: 'fr',
@@ -173,7 +218,7 @@ function draw(nodes, edges, containerId, optionsContainerId) {
         const node = e.nodes[0]
         const s = nodes.get(node)
         document.getElementById("sommets").value = s.label
-        updateSommetInfo(G, false)
+        updateSommetInfoDOM(G, false)
     });
     return network
 }
