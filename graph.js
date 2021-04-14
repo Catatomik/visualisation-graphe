@@ -129,7 +129,7 @@ function createEdges(G, sommets) {
             document.getElementById("s1").classList.add('is-valid')
             document.getElementById("s2").classList.add('is-valid')
             document.getElementById("length").innerHTML = chemin.length-1
-            if (modeChemin == 'dijkstra') {
+            if (pondere) {
                 let cost = 0
                 for (let i = 0; i < chemin.length-1; i++) {
                     cost += G.poids[`${chemin[i]}-${chemin[i+1]}`]
