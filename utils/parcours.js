@@ -115,3 +115,49 @@ function coloration_gloutonne(G) {
     }
     return coloration
 }
+
+/**
+ * @description Retourne la clé de la plus petite valeur d'un objet
+ * @param {Object} obj L'objet
+ * @returns {String}
+ */
+function min(obj) {
+    return Object.keys(obj).sort((a, b) => obj[a][0]-obj[b][0])[0]
+}
+
+/**
+ * Trouver le chemin optimal partant du sommet d arrivant au sommet a dans le graphe pondéré G
+ * @param {GraphePondere} G Graphe source
+ * @param {String} d Le sommet départ
+ * @param {String} a Le sommet arrivée
+ * @returns {String[]}
+ */
+function dijkstra(G, d, a) {
+    let totales = {}
+    let partielles = G.sommets.reduce((o, s) => { return { ...o, [s]: [Infinity, undefined] } }, {})
+    partielles[d] = [0, null]
+    while (Object.keys(partielles).length > 0) {
+        let s = min(partielles)
+
+        const adj = G.voisins(s).filter(s1 => !(s1 in totales))
+        const distances = adj.reduce((o, s1) => { return { ...o, [s1]: [partielles[s][0]+G.poids[`${s}-${s1}`], s] } }, {})
+
+        for (let s1 in distances) {
+            if (distances[s1][0] < partielles[s1][0]) {
+                partielles[s1] = distances[s1]
+            }
+        }
+
+        totales[s] = partielles[s]
+        delete partielles[s]
+    }
+
+    console.log(totales)
+
+    let chemin = []
+    while (a != null) {
+        chemin = [a, ...chemin]
+        a = totales[a][1]
+    }
+    return chemin
+}
