@@ -32,24 +32,32 @@
         <script type="text/javascript" src="./utils/parcours.js"></script>
         <script type="text/javascript" src="./examples/routage.js"></script>
         <script type="text/javascript" src="./graph.js"></script>
-        <div class="container mt-2 p-3">
+        <div class="container p-2">
             <div class="row row-cols-3 px-1">
                 <div class="col-4 px-1">
                     <div class="bg-dark rounded p-2 h-100">
-                        <h5 class="mx-2 mt-2">Coloration</h5>
+                        <h5 class="mx-2 mt-2">Affichage</h5>
                         <hr class="my-2">
-                        <div class="form-check my-1">
+                        <div class="form-check mb-1">
                             <input class="form-check-input" type="radio" name="coloration" value="coloration_gloutonne" onclick="create()">
                             <label class="form-check-label" for="coloration_gloutonne">Coloration gloutonne</label>
                         </div>
-                        <div class="form-check my-1">
+                        <div class="form-check mb-1">
                             <input class="form-check-input" type="radio" name="coloration" value="coloration_degre" onclick="create()">
                             <label class="form-check-label" for="coloration_degre">Coloration selon degrés</label>
                         </div>
-                        <p class="my-1 ms-1">Couleurs : <span id="nb_couleurs">ø</span></p>
-                        <div class="input-group my-1">
+                        <p class="mb-1 ms-1">Couleurs : <span id="nb_couleurs">ø</span></p>
+                        <div class="form-check mb-1 p-0">
                             <input class="form-check-input m-1" type="checkbox" id="coloration_arete" checked onclick="create()">
-                            <label class="input-group-label mx-2" for="coloration_arete">Coloration arêtes</label>
+                            <label class="form-check-label mx-1" for="coloration_arete">Coloration arcs</label>
+                        </div>
+                        <div class="form-check mb-1 p-0">
+                            <input class="form-check-input m-1" type="checkbox" id="taille_sommets_degre" onclick="create()">
+                            <label class="form-check-label mx-1" for="taille_sommets_degre">Taille sommets selon degré</label>
+                        </div>
+                        <div class="form-check mb-1 p-0">
+                            <input class="form-check-input m-1" type="checkbox" id="taille_arcs_poids" onclick="create()">
+                            <label class="form-checkp-label mx-1" for="taille_arcs_poids">Taille arcs selon poids</label>
                         </div>
                     </div>
                 </div>
@@ -58,15 +66,15 @@
                         <h5 class="mx-2 mt-2">Analyse</h5>
                         <hr class="my-2">
                         Chemin le plus court
-                        <div class="form-check my-1">
+                        <div class="form-check mb-1">
                             <input class="form-check-input" type="radio" name="chemin" value="nb_sommets" onclick="create()">
                             <label class="form-check-label" for="nb_sommets">Nombre de sommets</label>
                         </div>
-                        <div class="form-check my-1">
+                        <div class="form-check mb-1">
                             <input class="form-check-input" type="radio" name="chemin" id="dijkstra" value="dijkstra" disabled onclick="create()">
                             <label class="form-check-label" for="dijkstra">Dijkstra</label>
                         </div>
-                        <div class="input-group my-1">
+                        <div class="input-group mb-1">
                             <span class="input-group-text">De</span>
                             <input list="nodes" class="form-control" placeholder="sommet..." onkeyup="updateNodesDOM(G, document.getElementById('s1').value)" id="s1">
                             <datalist id="nodes"></datalist>
@@ -82,9 +90,9 @@
                         <h5 class="mx-2 mt-2">Gestion</h5>
                         <hr class="my-2">
                         <p class="m-1">Status : <span id="status">initial loading...</span></p>
-                        <div class="input-group my-1">
+                        <div class="form-check mb-1 p-0">
                             <input class="form-check-input m-1" checked="true" type="checkbox" id="gen_fast" onclick="create()">
-                            <label class="input-group-label mx-2" for="gen_fast">Génération rapide</label>
+                            <label class="form-check-label mx-1" for="gen_fast">Génération rapide</label>
                         </div>
                         <button class="btn btn-primary m-1" onclick="create()">Actualiser</button>
                         <button class="btn btn-warning m-1" onclick="create(true)">Re-grapher</button>
@@ -94,12 +102,12 @@
                 </div>
             </div>
         </div>
-            <div class="row row-cols-2 px-1 mb-3">
+            <div class="row row-cols-2 px-1 mt-2 mb-3">
                 <div class="col-3">
                     <div class="border bColor border-1 rounded-1 p-2 ms-2">
                         <h1 class="display-5 ms-2 overflow-hidden" id="nom">Nom</h1>
                         <hr class="mb-3 mt-0">
-                        <div class="input-group my-1 mt-2">
+                        <div class="input-group mb-1 mt-2">
                             <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_voisins" aria-expanded="true" aria-controls="collapse_voisins">Voisins</button>
                             <input class="form-control" type="text" id="degre" disabled>
                         </div>
@@ -125,12 +133,6 @@
             </div>
         <script type="text/javascript">
             function create(makeG = false) {
-                let colorNodes
-                const radios = document.getElementsByName('coloration');
-                for (let radio of radios) {
-                    if (radio.checked) colorNodes = radio.value
-                }
-                const colorEdge = document.getElementById('coloration_arete').checked
                 if (makeG) {
                     document.getElementById("status").innerHTML = `creating graph...`;
                     G = makeGraph();
@@ -138,14 +140,12 @@
                     updateSommetsDOM(G)
                 }
                 document.getElementById("status").innerHTML = `creating nodes...`;
-                var nodesSommets = createNodes(G, colorNodes);
-                nodes = nodesSommets[1];
-                const s1 = document.getElementById("s1").value;
-                const s2 = document.getElementById("s2").value;
+                var nodesSommets = createNodes(G);
+                var nodes = nodesSommets[1];
                 document.getElementById("status").innerHTML = `creating edges...`;
-                edges = createEdges(G, nodesSommets[0], { s1, s2 }, colorEdge)[1];
+                var edges = createEdges(G, nodesSommets[0])[1];
                 document.getElementById("status").innerHTML = `drawing...`;
-                nw = draw(nodes, edges, "mynetwork");
+                var nw = draw(nodes, edges, "mynetwork");
             }
             create(true);
         </script>

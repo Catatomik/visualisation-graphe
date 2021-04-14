@@ -5,15 +5,20 @@ function makeGraph() {
     return G;
 };
 
-let G;
-let nodes;
-let edges;
-let nw;
+var G;
+var nodes;
+var edges;
+var nw;
 
-function createNodes(G, color) {
+function createNodes(G) {
+
+    let color
+    const radios = document.getElementsByName('coloration');
+    for (let radio of radios) if (radio.checked) color = radio.value
     let min;
     let max;
     let colorDict;
+
     document.getElementById("nb_couleurs").innerHTML = 'ø'
     if (color == "coloration_degre") {
         min = G.sommet_degre_min[1]+1
@@ -85,10 +90,17 @@ function updateSommetInfoDOM(G, highlight = true) {
     if (highlight) nw.selectNodes([nodes.map(n => n).find(n => n.label == s).id], true)
 }
 
-function createEdges(G, sommets, plus_court, color) {
+function createEdges(G, sommets) {
+
+    const plus_court = {
+        s1: document.getElementById("s1").value,
+        s2: document.getElementById("s2").value
+    }
+    const color = document.getElementById('coloration_arete').checked
 
     let chemin = []
     const pondere = G instanceof GraphePondere
+    const taille_arcs_poids = document.getElementById('taille_arcs_poids').checked
 
     document.getElementById("s1").classList.remove('is-invalid')
     document.getElementById("s2").classList.remove('is-invalid')
@@ -150,7 +162,7 @@ function createEdges(G, sommets, plus_court, color) {
                     width: onPath ? 5 : 1,
                     color: onPath || !color ? 'black' : undefined,
                     label: pondere ? String(G.poids[`${S[x]}-${S[y]}`]) : undefined,
-                    //value: pondere ? G.poids[`${S[x]}-${S[y]}`] : undefined,
+                    value: pondere && taille_arcs_poids ? G.poids[`${S[x]}-${S[y]}`] : undefined,
                 })
 
             }
@@ -168,7 +180,7 @@ function draw(nodes, edges, containerId) {
     };
     let options = {
         nodes: {
-            shape: "dot",
+            shape: document.getElementById('taille_sommets_degre').checked ? "dot" : "ellipse",
             scaling: {
                 min: Math.min(...nodes.map(n => n.value)),
                 max: Math.max(...nodes.map(n => n.value)),
