@@ -152,8 +152,6 @@ function dijkstra(G, d, a) {
         delete partielles[s]
     }
 
-    console.log(totales)
-
     let chemin = []
     while (a != null) {
         chemin = [a, ...chemin]

@@ -156,7 +156,6 @@ function createEdges(G, sommets, plus_court, color) {
             }
         }
     }
-    console.log(aretes)
     let edges = new vis.DataSet(aretes);
     return [aretes, edges];
 }
@@ -175,7 +174,7 @@ function draw(nodes, edges, containerId) {
                 max: Math.max(...nodes.map(n => n.value)),
             },
             font: {
-                size: 12,
+                size: 16,
             },
         },
         edges: {
