@@ -50,6 +50,16 @@ class Graphe {
     }
 
     /**
+     * @description Vérifie l'existence d'une arête entre s1 et s2
+     * @param {String} s1 Un sommet du graphe
+     * @param {String} s2 Un sommet du graphe
+     * @returns {Boolean}
+     */
+    arete(s1, s2) {
+        return this.arc(s1, s2) && this.arc(s2, s1)
+    }
+
+    /**
      * @description Retourne vrai si les sommets s1 et s2 sont adjacents, sinon faux
      * @param {String} s1 Un sommet du graphe
      * @param {String} s2 Un sommet du graphe
