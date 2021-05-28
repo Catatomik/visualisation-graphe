@@ -24,7 +24,7 @@ function creation() {
      * @param {Number} s La somme à décomposer
      * @returns {Number}
      */
-    (function nb_pieces(pieces = euros, s = 7, parent = s) {
+    (function nb_pieces(pieces, s, parent = s) {
         if (s == 0) return 0
         let nb_a_rendre = s
         pieces = pieces.sort((a, b) => b-a)
@@ -36,7 +36,7 @@ function creation() {
             }
         }
         return nb_a_rendre
-    })()
+    })(euros, 7)
 
     return G
 
