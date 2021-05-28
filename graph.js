@@ -1,7 +1,10 @@
 function makeGraph() {
     const G = creation();
     if (G instanceof GraphePondere) document.getElementById("dijkstra").disabled = false
-    else document.getElementById("dijkstra").disabled = true
+    else {
+        document.getElementById("dijkstra").disabled = true
+        document.getElementById("taille_arcs_poids").disabled = true
+    }
     return G;
 };
 
