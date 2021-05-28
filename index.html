@@ -30,7 +30,7 @@
         <script type="text/javascript" src="./utils/Graphe.js"></script>
         <script type="text/javascript" src="./utils/Graphe_pondere.js"></script>
         <script type="text/javascript" src="./utils/parcours.js"></script>
-        <script type="text/javascript" src="./examples/routage.js"></script>
+        <script type="text/javascript" src="./examples/pile_appels.js"></script>
         <script type="text/javascript" src="./graph.js"></script>
         <div class="container p-2">
             <div class="row row-cols-3 px-1">
@@ -145,9 +145,14 @@
             function create(makeG = false) {
                 if (makeG) {
                     document.getElementById("status").innerHTML = `creating graph...`;
-                    G = makeGraph();
-                    updateNodesDOM(G);
-                    updateSommetsDOM(G)
+                    try {
+                        G = makeGraph();
+                        if (!G) throw new Error("Error while creating graph.")
+                        updateNodesDOM(G);
+                        updateSommetsDOM(G)
+                    } catch(e) {
+                        return document.getElementById("status").innerHTML = `error while creating graph.`;
+                    }
                 }
                 document.getElementById("status").innerHTML = `creating nodes...`;
                 var nodesSommets = createNodes(G);
