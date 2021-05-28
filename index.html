@@ -156,11 +156,11 @@
                 }
                 document.getElementById("status").innerHTML = `creating nodes...`;
                 var nodesSommets = createNodes(G);
-                var nodes = nodesSommets[1];
+                nodes = nodesSommets[1];
                 document.getElementById("status").innerHTML = `creating edges...`;
-                var edges = createEdges(G, nodesSommets[0])[1];
+                edges = createEdges(G, nodesSommets[0])[1];
                 document.getElementById("status").innerHTML = `drawing...`;
-                var nw = draw(nodes, edges, "mynetwork");
+                nw = draw(nodes, edges, "mynetwork");
             }
             create(true);
         </script>
