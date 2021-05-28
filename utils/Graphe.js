@@ -46,7 +46,7 @@ class Graphe {
      * @returns {Boolean}
      */
     arc(s1, s2) {
-        return this.adj[s1].includes(s2)
+        return this.voisins(s1).find(s => s == s2) ? true : false
     }
 
     /**
