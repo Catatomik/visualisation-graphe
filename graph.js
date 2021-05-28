@@ -9,6 +9,7 @@ function makeGraph() {
 };
 
 var G;
+var customOpts;
 var nodes;
 var edges;
 var nw;
@@ -220,6 +221,7 @@ function draw(nodes, edges, containerId) {
             }
         },
     };
+    if (customOpts) options = {...options, ...customOpts}
     const network = new vis.Network(container, data, options);
     network.on('stabilizationProgress', (progress) => {
         document.getElementById("status").innerHTML = `stabilizing (${progress.iterations}/${progress.total})...`
