@@ -105,7 +105,7 @@ class Stack {
     }
 
     *[Symbol.iterator]() {
-        for (let el of this.toArray()) {
+        for (let el of this.content) {
             yield el
         }
     }
@@ -131,11 +131,22 @@ class Stack {
         return s
     }
 
-}
+    /**
+     * Find the index of an element, like an Array's find method.
+     * @param {Function} predicate Function that evaluates to true when the element is found
+     * @returns {Number}
+     */
+    findIndex(predicate) {
+        if (this.isEmpty) return -1
 
-// const _pile = Stack
-// /**
-//  * @description Wrapper function for Stack class
-//  * @returns {Stack}
-//  */
-// Stack = function(...args) { return new _pile(...args) }
+        let i = 0
+        for (let el of this) {
+            try {
+                if (predicate(el)) return i
+            } catch(e) {}
+            i++
+        }
+        return -1
+    }
+
+}

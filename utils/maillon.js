@@ -1,7 +1,7 @@
 /**
  * @description Class of chained array
  */
- class Link {
+class Link {
 
     static emptyLink = null
 
@@ -40,21 +40,31 @@
         return 1+this._next.depth
     }
 
-    toArray() {
+    toArrayRec() {
         if (!this._next || !(this._next instanceof Link)) return [this.value]
         let next = this._next.toArray()
         return [this.value, ...next]
     }
 
-    toArrayReverted() {
+    toArray() {
+        return Array.from(this)
+    }
+
+    toArrayRevertedRec() {
         if (!this._next || !(this._next instanceof Link)) return [this.value]
         let next = this._next.toArray()
         return [...next, this.value]
     }
 
+    toArrayReverted() {
+        return this.toArray().reverse()
+    }
+
     *[Symbol.iterator]() {
-        for (let el of this.toArray()) {
-            yield el
+        let el = this
+        while (el != Link.emptyLink) {
+            yield el.value
+            el = el._next
         }
     }
 
@@ -62,11 +72,25 @@
      * @description Get the n(th) element of the link
      * @param {Number} n Index of the element to access to 
      */
-    get(n) {
+    get_rec(n) {
         if (n < 0) throw new Error("Invalid index")
         if (n == 0) return this.value
         if (this._next instanceof Link) return this._next.get(n-1)
-        else throw new Error("Invalid index")
+        else throw new Error("Index out of range")
+    }
+
+    /**
+    * @description Get the n(th) element of the link
+    * @param {Number} n Index of the element to access to 
+    */
+    get(n) {
+        if (n < 0) throw new Error("Invalid index")
+        let i = 0
+        for (let el of this) {
+            if (n == i) return el
+            i++
+        }
+        throw new Error("Index out of range")
     }
 
     /**
@@ -82,10 +106,3 @@
     }
 
 }
-
-// const _link = Link
-// /**
-//  * @description Wrapper function for Link class
-//  * @returns {Link}
-//  */
-// Link = function(...args) { return new _link(...args) }
