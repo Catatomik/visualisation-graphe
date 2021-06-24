@@ -136,7 +136,7 @@ function createEdges(G, sommets) {
             if (pondere) {
                 let cost = 0
                 for (let i = 0; i < chemin.length-1; i++) {
-                    cost += G.poids[`${chemin[i]}-${chemin[i+1]}`]
+                    cost += G.poids(chemin[i], chemin[i+1])
                 }
                 document.getElementById("cost").innerHTML = cost
             }
@@ -165,8 +165,8 @@ function createEdges(G, sommets) {
                     arrows: G.arete(S[x], S[y]) && !pondere ? undefined : 'to',
                     width: onPath ? 5 : 1,
                     color: onPath || !color ? 'black' : undefined,
-                    label: pondere ? String(G.poids[`${S[x]}-${S[y]}`]) : undefined,
-                    value: pondere && taille_arcs_poids ? G.poids[`${S[x]}-${S[y]}`] : undefined,
+                    label: pondere ? String(G.poids(S[x], S[y])) : undefined,
+                    value: pondere && taille_arcs_poids ? G.poids(S[x], S[y]) : undefined,
                 })
 
             }

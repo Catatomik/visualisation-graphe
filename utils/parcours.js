@@ -4,7 +4,7 @@
  * @param {String} s Le sommet duquel partir
  * @returns {Array} Les sommets parcourus
  */
-function parcours_profondeur(G, s) {
+ function parcours_profondeur(G, s) {
     const s_coches = []
     const p = new Stack()
     p.stack(s)
@@ -140,7 +140,7 @@ function dijkstra(G, d, a) {
         let s = min(partielles)
 
         const adj = G.voisins(s).filter(s1 => !(s1 in totales))
-        const distances = adj.reduce((o, s1) => { return { ...o, [s1]: [partielles[s][0]+G.poids[`${s}-${s1}`], s] } }, {})
+        const distances = adj.reduce((o, s1) => { return { ...o, [s1]: [partielles[s][0]+G.poids(s, s1), s] } }, {})
 
         for (let s1 in distances) {
             if (distances[s1][0] < partielles[s1][0]) {
