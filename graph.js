@@ -157,7 +157,7 @@ function createEdges(G, sommets) {
 
                 const fromIndex = chemin.indexOf(S[x])
                 const toIndex = chemin.indexOf(S[y])
-                const onPath = fromIndex > -1 && toIndex > -1 && (fromIndex == toIndex-1 || fromIndex-1 == toIndex)
+                const onPath = fromIndex > -1 && toIndex > -1 && (fromIndex == toIndex-1 || (fromIndex-1 == toIndex && !pondere))
 
                 aretes.push({
                     from,
